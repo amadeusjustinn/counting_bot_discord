@@ -65,9 +65,9 @@ async def on_message(message):
 
     Parameters
     ==========
-    - exp
+    - message
 
-        Expression to be verified
+        Newest message
     """
 
     # Don't check message if written by self
