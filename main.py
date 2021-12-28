@@ -114,6 +114,10 @@ async def on_message(message):
                       "<a:youdeservethisheart:923398534714253372>",
                       "<a:daysgobyheart:923778036476809227>"]
 
+        # List of forbidden starting characters
+        char_arr = [".", ",", "!", "@", "#", "$", "%", "^", "&", ":", ";",
+                    "<", ">", "/", "?", "{", "}", "[", "]", "\"", "'", "|", "/"]
+
         # See stats using tailwhip!user <@user>; user parameter is optional
         if message.content.startswith('tailwhip!user'):
             # Determine whose stats to analyse
@@ -137,8 +141,18 @@ async def on_message(message):
                 if len(split_arr) != 0:
                     expression = split_arr[0]
 
+                    # If expression can be evaluated
+                    # If expression starts with forbidden character
+                    # If message is written by user in question
+                    evaluateable = evaluate(expression, data["curr_count"])[
+                        0] != float("-inf")
+                    starts_with_fb = any(msg.content.startswith(
+                        fb_char) for fb_char in char_arr)
+                    author_verif = str(msg.author.id) == u_id
+
+                    # Message does not start with forbidden character
                     # If expression can be evaluated and written by user in question
-                    if evaluate(expression, data["curr_count"])[0] != float("-inf") and str(msg.author.id) == u_id:
+                    if evaluateable and (not starts_with_fb) and author_verif:
                         react_arr = msg.reactions
                         for emo1 in react_arr:
                             # Only care about emoji sent by bot for total count
@@ -176,8 +190,12 @@ async def on_message(message):
             # Evaluate first string before whitespace
             expression = message.content.split()[0]
 
+            # If expression starts with forbidden character
+            starts_with_fb = any(message.content.startswith(fb_char)
+                                 for fb_char in char_arr)
+
             # Disregard if there are letters
-            if (not any(char.isalpha() for char in expression)) and (not expression.startswith("<")) and ("@" not in expression):
+            if (not any(char.isalpha() for char in expression)) and (not starts_with_fb) and ("@" not in expression):
                 # Check using evaluate and check for user repeat counting
                 result = evaluate(expression, data["curr_count"])
 
