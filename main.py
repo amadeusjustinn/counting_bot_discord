@@ -1,6 +1,6 @@
-from dotenv import load_dotenv
 import json
 import os
+from dotenv import load_dotenv
 import discord
 
 
@@ -31,7 +31,7 @@ def evaluate(exp, curr_count):
     # Perform the calculation
     try:
         result = eval(temp)
-    except:
+    except Exception:
         return [float("-inf"), False]
 
     # Check if current expression evaluates to 1 more than curr_count
@@ -47,7 +47,7 @@ async def on_ready():
     Checks last valid count (due to bot cycling). Confirms that the bot is ready to use.
     """
 
-    incorrect_emoji = "<a:bubblerf:935756938661232690>"
+    incorrect_emoji = "<a:mitbutterflycyan:934267495794237550>"
 
     # List of forbidden start/end characters
     char_arr = ["~", "`", ".", ",", "!", "@", "#", "$", "%", "^", "&", ":", ";", "/", "\\",
@@ -116,7 +116,7 @@ async def on_ready():
         json.dump(data, file2, indent=4)
 
     # Change bot status
-    await client.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.listening, name="Humming Man"))
+    await client.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.listening, name="Tailwhip"))
 
     # Confirmation message
     print('Logged in')
@@ -146,11 +146,11 @@ async def on_message(message):
     # Only react to other messages if they are sent in counting channel
     if message.channel.id == int(os.getenv("CHANNEL_ID")):
         # List of possible reactions
-        emoji_list = ["<a:bubblerf:935756938661232690>",                # 0, incorrect
-                      "<a:bubblercyan:935757958254583868>",             # 1, correct
+        emoji_list = ["<a:mitbutterflycyan:934267495794237550>",        # 0, incorrect
+                      "<a:mitbutterflywhite:934267494586265620>",       # 1, correct
                       "<a:hearttriosparkles:931075919014141952>",       # 2, 69
-                      "<a:bubblerb:934224098425450526>",                # 3, every 10 under 100
-                      "<a:adragos:931062597271298059>"                  # 4, every 100 under 1000
+                      "<a:mitbutterflybeige:934267494657581176>",       # 3, every 10 under 100
+                      "<a:mitbutterflypink:934268080878673970>"         # 4, every 100 under 1000
                       ]
 
         # List of forbidden start/end characters
@@ -158,7 +158,7 @@ async def on_message(message):
                     "*", "(", ")", "<", ">", "?", "{", "}", "[", "]", "\"", "'", "|", "_", "="]
 
         # See stats using tailwhip!user <@user>; user parameter is optional
-        if message.content.startswith('hm!user'):
+        if message.content.startswith('mit!user'):
             # Determine whose stats to analyse
             u_id = ""
             msg_arr = message.content.split()
@@ -262,10 +262,11 @@ async def on_message(message):
                     data["curr_count"] = 0
                     data["last_user"] = 0
 
-                    embed_m = discord.Embed()
+                    embed_m = discord.Embed(colour=0xFFFFFF)
                     embed_m.add_field(
                         name="<a:burst2:934223774759399514> 𝗪𝗿𝗼𝗻𝗴 𝗰𝗼𝘂𝗻𝘁 <a:burst2:934223774759399514>",
-                        value=f"𝗹𝗼𝗼𝗸𝘀 𝗹𝗶𝗸𝗲 𝘆𝗼𝘂 𝗺𝗲𝘀𝘀𝗲𝗱 𝘂𝗽 𝘁𝗵𝗲 𝘀𝗲𝗾𝘂𝗲𝗻𝗰𝗲. 𝘁𝗵𝗮𝘁'𝘀 𝗼𝗸𝗮𝘆! 𝘁𝗵𝗲 𝗻𝗲𝘅𝘁 𝗻𝘂𝗺𝗯𝗲𝗿 𝗶𝘀 𝟭 <a:burst4:934223774763581540>")
+                        value="𝗹𝗼𝗼𝗸𝘀 𝗹𝗶𝗸𝗲 𝘆𝗼𝘂 𝗺𝗲𝘀𝘀𝗲𝗱 𝘂𝗽 𝘁𝗵𝗲 𝘀𝗲𝗾𝘂𝗲𝗻𝗰𝗲. 𝘁𝗵𝗮𝘁'𝘀 𝗼𝗸𝗮𝘆! 𝘁𝗵𝗲 𝗻𝗲𝘅𝘁 𝗻𝘂𝗺𝗯𝗲𝗿 𝗶𝘀 𝟭 <a:burst4:934223774763581540>")
+                    embed_m.set_thumbnail(url="")
                     await message.channel.send(embed=embed_m)
 
     # Update JSON file
