@@ -1,7 +1,8 @@
 import json
 import os
-from dotenv import load_dotenv
+
 import discord
+from dotenv import load_dotenv
 
 
 def evaluate(exp, curr_count):
@@ -59,7 +60,7 @@ async def on_ready():
         data = json.load(file1)
 
     # Get counting channel history
-    c_id = int(os.getenv("CHANNEL_ID"))
+    c_id = data["channel"]
     channel_hist = await client.get_channel(c_id).history(limit=float("inf")).flatten()
 
     # Create flag to avoid checking every message in the channel, only the last valid one
